@@ -1,0 +1,63 @@
+=begin
+  *    *    *    *    *   *    command to be executed
+  -    -    -    -    -   -
+  |    |    |    |    |   |
+  |    |    |    |    |   +- Year (optional)
+  |    |    |    |    +----- day of week (0 - 6) (Sunday=0)
+  |    |    |    +---------- month (1 - 12)
+  |    |    +--------------- day of month (1 - 31)
+  |    +-------------------- hour (0 - 23)
+  +------------------------- min (0 - 59)
+=end
+
+require "rubygems"
+require "time"
+
+def dayofweek_match?(value, time)
+  return true if value == "*"
+  return true if value.to_i == time.wday+1
+  return false
+end
+
+def month_match?(value, time)
+  return true if value == "*"
+  return true if value.to_i == time.month
+  return false
+end
+
+def dayofmonth_match?(value, time)
+  return true if value == "*"
+  return true if value.to_i == time.day
+  return false
+end
+
+def hour_match?(value, time)
+  return true if value == "*"
+  return true if value.to_i == time.hour
+  return false
+end
+
+def minute_match?(value, time)
+  return true if value == "*"
+  return true if value.to_i == time.min
+  return false
+end
+
+@cron_line = "2 * * * * /usr/local/bin"
+
+@min, @hour, @dayofmonth, @month, @dayofweek, @cmd = @cron_line.split(" ")
+
+@start = Time.parse( Time.now.strftime("%Y-%m-%d %H:%M:00") )
+@end = @start + (3600*36)
+
+while @start < @end
+  @start += 60
+  
+  next unless dayofweek_match?(@dayofweek, @start)
+  next unless month_match?(@month, @start)
+  next unless dayofmonth_match?(@dayofmonth, @start)
+  next unless hour_match?(@hour, @start)
+  next unless minute_match?(@min, @start)
+
+  puts "#{@start.strftime('%Y-%m-%d %H:%M:%S')}: #{@cmd}"
+end
