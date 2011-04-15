@@ -51,25 +51,34 @@ module VRoy
       return true
     end
     
-    # Weekday value in crontab is 0-6 (Sunday=0)
+    # day of week (0 - 6) (Sunday=0)
     # Weekday value in Time is 0-6 (Sunday=0)    
     def dayofweek_match?(cron_value, time_obj)
+      raise "Invalid value for day of week." if !range_match?( cron_value, (0..6) )
       return value_match?(cron_value, time_obj.wday)
     end
 
+    # month (1 - 12)
     def month_match?(cron_value, time_obj)
+      raise "Invalid value for month." if !range_match?( cron_value, (1..12) )
       return value_match?(cron_value, time_obj.month)
     end
 
+    # day of month (1 - 31)
     def dayofmonth_match?(cron_value, time_obj)
+      raise "Invalid value for day of month." if !range_match?( cron_value, (1..31) )
       return value_match?(cron_value, time_obj.day)
     end
 
+    # hour (0 - 23)
     def hour_match?(cron_value, time_obj)
+      raise "Invalid value for hour." if !range_match?( cron_value, (1..23) )
       return value_match?(cron_value, time_obj.hour)
     end
 
+    # min (0 - 59)
     def minute_match?(cron_value, time_obj)
+      raise "Invalid value for minute." if !range_match?( cron_value, (0..59) )
       return value_match?(cron_value, time_obj.min)
     end
     
@@ -85,6 +94,14 @@ module VRoy
       return true if cron_value.to_s.match(/\*\/(\d+)/) and (time_value % $1.to_i) == 0
       return true if cron_value.to_i == time_value
       return false
+    end
+    
+    def range_match?(cron_value, range)
+      if cron_value.to_s.match(/\d+/)
+        return range.include?( $1.to_i )
+      else
+        return true # Not even an int, can't validate.
+      end
     end
 
   end
