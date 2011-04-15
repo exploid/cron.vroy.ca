@@ -50,7 +50,7 @@ $(document).ready(function(){
             } else {
                 $("#error").hide();
             
-                var results = $("#results");
+                var results = $("#results").html("");
                 var cmd = data[1].cmd;
 
                 $("#notice").html("Run <b>"+cmd+"</b> at the following timestamps:").show();
