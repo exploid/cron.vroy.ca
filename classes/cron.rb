@@ -97,7 +97,7 @@ module VRoy
     end
     
     def range_match?(cron_value, range)
-      if cron_value.to_s.match(/\d+/)
+      if cron_value.to_s.match(/(\d+)/)
         return range.include?( $1.to_i )
       else
         return true # Not even an int, can't validate.
