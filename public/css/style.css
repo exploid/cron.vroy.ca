@@ -1,8 +1,13 @@
-.time {
-  font-size: 14px;
-  color: grey;
-  font-weight: normal;
-}
+* { font-size: 14px; }
+
 #cron {
-  width: 700px;
+  width: 710px;
+}
+
+#error, #notice { display:none }
+
+#results div {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 4px;
 }

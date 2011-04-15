@@ -21,6 +21,8 @@ module VRoy
       @original_cron_string = cron_string
       
       values = cron_string.split(" ")
+      
+      raise "Invalid crontab line" if values.size < 6
 
       @min = values.shift
       @hour = values.shift

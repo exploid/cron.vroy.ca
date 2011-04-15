@@ -23,7 +23,7 @@ class MainController < Ramaze::Controller
         }
       end
     end
-
+    
     return @matches.to_json
   end
 
