@@ -5,11 +5,11 @@
   margin-top: 0px;
 }
 
-#error, #notice, #results { display:none }
+#error, #info, #results { display:none }
 
 #results {
-    margin:0px;
-    padding:0px;
+  margin:0px;
+  padding:0px;
   text-align:center;
 }
 
@@ -22,9 +22,15 @@
 
 #instructions {
   background-color: #eee;
-  border: 1px solid grey;
+  border: 2px solid grey;
+  padding: 9px;
 }
 
 #instructions h3 {
   font-weight: bold;
+  margin-bottom: 5px;
+}
+
+#instructions input {
+  width: 85px;
 }

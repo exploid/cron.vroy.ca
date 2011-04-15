@@ -23,7 +23,7 @@ $(document).ready(function(){
         
         function postCronLine() {
             var cron = $("#cron").val();
-            $("#notice").html("Processing your request...").show();
+            $("#info").html("Processing your request...").show();
             $("#results").hide();
             $("#error").hide();
             $.ajax({
@@ -39,20 +39,20 @@ $(document).ready(function(){
         function displayErrorMessage() {
             $("#error").html("Something wrong happened").show();
             $("#results").hide();
-            $("#notice").hide();
+            $("#info").hide();
         }
 
         function displayNextCrons( data ) {
             if (data.error) {
                 $("#error").html(data.error).show();
-                $("#notice").hide();
+                $("#info").hide();
                 $("#results").hide();
             } else {
                 $("#error").hide();
             
                 var results = $("#results").html("");
 
-                $("#notice").html("Starting at <b>"+data.start_time+"</b>, the command <b>"+data.cmd+"</b> will run at:");
+                $("#info").html("Starting at <b>"+data.start_time+"</b>, the command <b>"+data.cmd+"</b> will run at:");
                 
                 for (var i in data.times) {
                     results.append("<div>"+data.times[i]+"</div>");

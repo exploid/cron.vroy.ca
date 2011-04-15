@@ -1,7 +1,12 @@
 <div class="span-9">
   <div id="instructions">
-    <h3>Quick crontab chart:</h3>
-    <pre class="top bottom">*  *  *  *  *  *  command to be executed
+    
+    <h3>Crontab tester</h3>
+    <p>Test a crontab line by seeing the next 20 times it would run.</p>
+    <p>Get started by copying this line in: <input type="text" class="text" value="* * * * * cmd" /></p>
+    
+    <h3>Quick crontab chart</h3>
+    <pre>*  *  *  *  *  *  command to be executed
 -  -  -  -  -  -
 |  |  |  |  |  |
 |  |  |  |  |  +- Year (optional)
@@ -10,8 +15,11 @@
 |  |  +---------- day of month (1 - 31)
 |  +------------- hour (0 - 23)
 +---------------- min (0 - 59)</pre>
-
-    For more information on how it works, see <a href="http://en.wikipedia.org/wiki/Cron" target="_blank">the wikipedia article</a>.
+    <p>
+      For more information on how it works, see <a href="http://en.wikipedia.org/wiki/Cron" target="_blank">the wikipedia article</a>.
+    </p>
+    
+    <p class="notice">Note: The current implementation does not currently support everything. Only *, */2 and 2 works at the moment for the numeric values.</p>
   </div>
 </div>
 
@@ -19,7 +27,7 @@
   <div class="span-15 last">
     <input type="text" id="cron" class="title" value="" />
     <div id="error" class="error"></div>
-    <div id="notice" class="notice"></div>
+    <div id="info" class="info"></div>
   </div>
 
   <div class="span-15 last">
