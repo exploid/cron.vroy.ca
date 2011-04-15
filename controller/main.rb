@@ -10,6 +10,7 @@ class MainController < Ramaze::Controller
     @cron = VRoy::Cron.new( request[:cron] )
 
     @start = Time.parse( Time.now.strftime("%Y-%m-%d %H:%M:00") )
+    start_time = @start.strftime("%Y-%m-%d %H:%M:%S")
 
     @matches = []
     while @matches.size < 20
@@ -17,14 +18,15 @@ class MainController < Ramaze::Controller
   
       if @cron.match?(@start)
         display_time = 
-        @matches << {
-          :time => @start.strftime('%Y-%m-%d %H:%M:%S'),
-          :cmd => @cron.cmd
-        }
+        @matches << @start.strftime('%Y-%m-%d %H:%M:%S')
       end
     end
-    
-    return @matches.to_json
+
+    return {
+      :times => @matches,
+      :cmd => @cron.cmd,
+      :start_time => start_time
+    }.to_json
   rescue Exception => e
     return { :error => e.message }.to_json
   end

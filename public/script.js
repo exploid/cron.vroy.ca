@@ -51,13 +51,11 @@ $(document).ready(function(){
                 $("#error").hide();
             
                 var results = $("#results").html("");
-                var cmd = data[1].cmd;
 
-                $("#notice").html("Run <b>"+cmd+"</b> at the following timestamps:").show();
-
-                for (var i in data) {
-                    var time = data[i].time;
-                    results.append("<div>"+time+"</div>");
+                $("#notice").html("Starting at <b>"+data.start_time+"</b>, the command <b>"+data.cmd+"</b> will run at:");
+                
+                for (var i in data.times) {
+                    results.append("<div>"+data.times[i]+"</div>");
                 }
                 $("#results").show();
             }
