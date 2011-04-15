@@ -1,13 +1,30 @@
 * { font-size: 14px; }
 
 #cron {
-  width: 710px;
+  width: 590px;
+  margin-top: 0px;
 }
 
-#error, #notice { display:none }
+#error, #notice, #results { display:none }
+
+#results {
+    margin:0px;
+    padding:0px;
+  text-align:center;
+}
 
 #results div {
   font-size: 14px;
   font-weight: bold;
   margin-bottom: 4px;
+
+}
+
+#instructions {
+  background-color: #eee;
+  border: 1px solid grey;
+}
+
+#instructions h3 {
+  font-weight: bold;
 }

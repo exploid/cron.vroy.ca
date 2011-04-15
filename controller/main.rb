@@ -25,6 +25,8 @@ class MainController < Ramaze::Controller
     end
     
     return @matches.to_json
+  rescue Exception => e
+    return { :error => e.message }.to_json
   end
 
 

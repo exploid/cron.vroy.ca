@@ -24,7 +24,8 @@ $(document).ready(function(){
         function postCronLine() {
             var cron = $("#cron").val();
             $("#notice").html("Processing your request...").show();
-            $("#results").html("");
+            $("#results").hide();
+            $("#error").hide();
             $.ajax({
                     url: "/cron",
                         dataType: "json",
@@ -37,21 +38,28 @@ $(document).ready(function(){
         
         function displayErrorMessage() {
             $("#error").html("Something wrong happened").show();
-            $("#results").html("<div></div>");
+            $("#results").hide();
             $("#notice").hide();
         }
 
         function displayNextCrons( data ) {
-            $("#error").html("").hide();
+            if (data.error) {
+                $("#error").html(data.error).show();
+                $("#notice").hide();
+                $("#results").hide();
+            } else {
+                $("#error").hide();
             
-            var results = $("#results");
-            var cmd = data[1].cmd;
+                var results = $("#results");
+                var cmd = data[1].cmd;
 
-            $("#notice").html("Run <b>"+cmd+"</b> at the following timestamps:").show();
+                $("#notice").html("Run <b>"+cmd+"</b> at the following timestamps:").show();
 
-            for (var i in data) {
-                var time = data[i].time;
-                results.append("<div>"+time+"</div>");
+                for (var i in data) {
+                    var time = data[i].time;
+                    results.append("<div>"+time+"</div>");
+                }
+                $("#results").show();
             }
         }
 });

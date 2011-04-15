@@ -1,8 +1,32 @@
-<div class="prepend-3 span-18 append-3">
-  <input type="text" id="cron" class="title" value="" />
-  <div id="error" class="error"></div>
-  <div id="notice" class="notice"></div>
+<div class="span-9">
+  <div id="instructions">
+    <h3>Quick crontab chart:</h3>
+    <pre class="top bottom">*  *  *  *  *  *  command to be executed
+-  -  -  -  -  -
+|  |  |  |  |  |
+|  |  |  |  |  +- Year (optional)
+|  |  |  |  +---- day of week (0 - 6) (Sunday=0)
+|  |  |  +------- month (1 - 12)
+|  |  +---------- day of month (1 - 31)
+|  +------------- hour (0 - 23)
++---------------- min (0 - 59)</pre>
+
+    For more information on how it works, see <a href="http://en.wikipedia.org/wiki/Cron" target="_blank">the wikipedia article</a>.
+  </div>
 </div>
 
-<div id="results" class="prepend-10 span-4 append-10">
+<div class="span-15 last">
+  <div class="span-15 last">
+    <input type="text" id="cron" class="title" value="" />
+    <div id="error" class="error"></div>
+    <div id="notice" class="notice"></div>
+  </div>
+
+  <div class="span-15 last">
+    <div id="results" class="success"></div>
+  </div>
+
 </div>
+
+
+
