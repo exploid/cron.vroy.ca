@@ -47,7 +47,32 @@ module VRoy
     def valid?
       return errors.empty?
     end
+
+=begin
+    ValueTypes = {
+      :dayofweek => {
+        :value => @dayofweek,
+        :invalid_message => "Invalid value for day of week.",
+        :range => (0..6),
+        :time_value => lambda{|t| t.wday },
+      }
+    }
     
+    def errors
+      errors = []
+      ValueTypes.each do |type, info|
+        errors << info[:invalid_message] if !range_match?( info[:value], info[:range] )
+      end
+      return errors
+    end
+    
+    def match?(time)
+      ValueTypes.each do |type, info|
+        match?( info[:value], info[:time_value].call(time) )
+      end
+    end
+=end
+
     # Runs a quick validation through each type of value and returns an array with all of the error messages.
     def errors
       if @errors.nil?
