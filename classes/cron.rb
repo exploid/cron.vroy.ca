@@ -1,6 +1,6 @@
 require "time"
 
-module VRoy
+module VRoy; module Cron
 
 =begin
   *    *    *    *    *   *    command to be executed
@@ -14,6 +14,46 @@ module VRoy
   +------------------------- min (0 - 59)
 =end
 
+  CronFields = [
+            [ :minute, {
+                :value => @minute,
+                :invalid_message => "Invalid value for minute.",
+                :range => (0..59),
+                :time_value => lambda{|t| t.min }
+              }],
+
+            [ :hour, {
+                :value => @hour,
+                :invalid_message => "Invalid value for hour.",
+                :range => (1..23),
+                :time_value => lambda{|t| t.hour }
+              }],
+
+            [ :dayofmonth, {
+                :value => @dayofmonth,
+                :invalid_message => "Invalid value for day of month.",
+                :range => (1..31),
+                :time_value => lambda{|t| t.day },
+              }],
+
+            [ :month, {
+                :value => @month,
+                :invalid_message => "Invalid value for month.",
+                :range => (1..12),
+                :time_value => lambda{|t| t.month },
+              }],
+
+            [ :dayofweek, {
+                :value => @dayofweek,
+                :invalid_message => "Invalid value for day of week.",
+                :range => (0..6),
+                :time_value => lambda{|t| t.wday },
+              }],
+
+           ]
+  
+  class InvalidFormat < Exception; end
+
   class Cron
     
     attr_reader :min, :hour, :dayofmonth, :month, :dayofweek, :year, :cmd
@@ -23,24 +63,21 @@ module VRoy
       values = cron_string.split(" ")
       
       raise "Please provide all required fields." if values.size < 6
-
-      @min = values.shift
-      @hour = values.shift
-      @dayofmonth = values.shift
-      @month = values.shift
-      @dayofweek = values.shift
+      
+      @values = {}
+      @values[:minute] = values.shift
+      @values[:hour] = values.shift
+      @values[:dayofmonth] = values.shift
+      @values[:month] = values.shift
+      @values[:dayofweek] = values.shift
       
       @cmd = values.join(" ")
-      
-      #TODO: @cmd = the rest of the string.
-      # if values.size == 7
-        # @min, @hour, @dayofmonth, @month, @dayofweek, @year, @cmd = values
-      # else
-      # @min, @hour, @dayofmonth, @month, @dayofweek, @cmd = values
-      # end
+      @values[:cmd] = @cmd
+
+      #TODO: Add support for optional year
 
       if !valid?
-        raise errors.join("<br/>")
+        raise InvalidFormat, errors
       end
     end
     
@@ -48,81 +85,42 @@ module VRoy
       return errors.empty?
     end
 
-=begin
-    ValueTypes = {
-      :dayofweek => {
-        :value => @dayofweek,
-        :invalid_message => "Invalid value for day of week.",
-        :range => (0..6),
-        :time_value => lambda{|t| t.wday },
-      }
-    }
-    
-    def errors
-      errors = []
-      ValueTypes.each do |type, info|
-        errors << info[:invalid_message] if !range_match?( info[:value], info[:range] )
-      end
-      return errors
-    end
-    
-    def match?(time)
-      ValueTypes.each do |type, info|
-        match?( info[:value], info[:time_value].call(time) )
-      end
-    end
-=end
-
-    # Runs a quick validation through each type of value and returns an array with all of the error messages.
     def errors
       if @errors.nil?
         @errors = []
-        @errors << "Invalid value for day of week." if !range_match?( @dayofweek, (0..6) )
-        @errors << "Invalid value for month." if !range_match?( @month, (1..12) )
-        @errors << "Invalid value for day of month." if !range_match?( @dayofmonth, (1..31) )
-        @errors << "Invalid value for hour." if !range_match?( @hour, (1..23) )
-        @errors << "Invalid value for minute." if !range_match?( @min, (0..59) )
+        
+        CronFields.each do |type, info|
+          @errors << info[:invalid_message] if !range_match?( @values[type], info[:range] )
+        end
       end
+
       return @errors
     end
-
-    # Method that confirms if all of the crontab values matches or not.
-    def match?(time_obj)
-      return false unless dayofweek_match?(@dayofweek, time_obj)
-      return false unless month_match?(@month, time_obj)
-      return false unless dayofmonth_match?(@dayofmonth, time_obj)
-      return false unless hour_match?(@hour, time_obj)
-      return false unless minute_match?(@min, time_obj)
-      
+    
+    def match?(time)
+      CronFields.each do |type, info|
+        return false if !value_match?( @values[type], info[:time_value].call(time) )
+      end
       return true
     end
     
-    # day of week (0 - 6) (Sunday=0)
-    # Weekday value in Time is 0-6 (Sunday=0)    
-    def dayofweek_match?(cron_value, time_obj)
-      return value_match?(cron_value, time_obj.wday)
+    # @start_at - Time object that specifies where to start to get the next runs
+    # @limit - How many results do you need
+    def next_runs(start_at, limit=20)
+      time = Time.parse( start_at.strftime("%Y-%m-%d %H:%M:00") )
+
+      matches = []
+      while matches.size < limit
+        if self.match?(time)
+          matches << time
+        end
+
+        time += 60
+      end
+
+      return matches
     end
 
-    # month (1 - 12)
-    def month_match?(cron_value, time_obj)
-      return value_match?(cron_value, time_obj.month)
-    end
-
-    # day of month (1 - 31)
-    def dayofmonth_match?(cron_value, time_obj)
-      return value_match?(cron_value, time_obj.day)
-    end
-
-    # hour (0 - 23)
-    def hour_match?(cron_value, time_obj)
-      return value_match?(cron_value, time_obj.hour)
-    end
-
-    # min (0 - 59)
-    def minute_match?(cron_value, time_obj)
-      return value_match?(cron_value, time_obj.min)
-    end
-    
     def to_s
       return @original_cron_string
     end
@@ -145,24 +143,17 @@ module VRoy
       end
     end
 
-  end
+  end # Cron
 
-end
-
+end; end # VRoy; Cron
 
 __END__
-@cron = VRoy::Cron.new( "0 0 0 2 0 /usr/local/bin" )
+begin
+  @cron = VRoy::Cron::Cron.new( "0 0 0 0 0 /usr/local/bin" )
 
-@start = Time.parse( Time.now.strftime("%Y-%m-%d %H:%M:00") )
-
-@matches = []
-while @matches.size < 20
-  @start += 60
-  
-  if @cron.match?(@start)
-    display_time = @start.strftime('%Y-%m-%d %H:%M:%S')
-    @matches << "#{display_time}: #{@cron.cmd}"
-  end
+  p @cron.next_runs( Time.now )
+rescue VRoy::Cron::InvalidFormat => e
+  p e.message
+  p e.methods.sort
 end
 
-puts @matches
