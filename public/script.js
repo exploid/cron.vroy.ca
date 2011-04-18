@@ -3,6 +3,10 @@ $(document).ready(function(){
         initField( "#cron", "Enter a crontab line to test and press enter" );
         initField( "#time", "Start time (Optional)" );
 
+        $("#example").click(function() {
+                this.select();
+            });
+
         function postCronLine() {
             var cron = $("#cron").val();
             var time = $("#time").val();
