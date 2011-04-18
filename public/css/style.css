@@ -39,3 +39,7 @@
 #instructions input {
   width: 85px;
 }
+
+.invalid_cron span {
+  padding: 2px;
+}

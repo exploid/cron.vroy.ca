@@ -28,7 +28,23 @@ class MainController < Ramaze::Controller
       :custom_time => custom_time
     }.to_json
   rescue VRoy::Cron::InvalidFormat => e
-    return { :error => e.message.join("<br/>") }.to_json
+    errors = e.message[:errors]
+    invalid_types = errors.map{|x| x.first }
+    messages = errors.map{|x| x.last }
+
+    cron = e.message[:cron]
+    
+    _cron = []
+    VRoy::Cron::CronFields.each do |type, info|
+      if invalid_types.include?( type )
+        _cron << "<span class='removed'>#{cron.values[type]}</span>"
+      else
+        _cron << "<span>#{cron.values[type]}</span>"
+      end
+    end
+    _cron << cron.cmd
+
+    return { :error => messages.join("<br/>"), :invalid_cron => _cron.join(" ") }.to_json
   rescue Exception => e
     return { :error => e.message } .to_json
   end

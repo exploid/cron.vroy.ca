@@ -35,7 +35,7 @@ $(document).ready(function(){
 
         function displayNextCrons( data ) {
             if (data.error) {
-                $("#error").html(data.error).show();
+                $("#error").html("<div class='invalid_cron'>"+data.invalid_cron+"</div><div>"+data.error+"</div>").show();
                 $("#info").hide();
                 $("#results").hide();
             } else {

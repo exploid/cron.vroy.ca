@@ -57,6 +57,7 @@ module VRoy; module Cron
   class Cron
     
     attr_reader :min, :hour, :dayofmonth, :month, :dayofweek, :year, :cmd
+    attr_reader :values
     def initialize(cron_string)
       @original_cron_string = cron_string
       
@@ -77,7 +78,7 @@ module VRoy; module Cron
       #TODO: Add support for optional year
 
       if !valid?
-        raise InvalidFormat, errors
+        raise InvalidFormat, { :cron => self, :errors => errors }
       end
     end
     
@@ -90,8 +91,8 @@ module VRoy; module Cron
         @errors = []
         
         CronFields.each do |type, info|
-          @errors << info[:invalid_message] if !range_match?( @values[type], info[:range] )
-          @errors << info[:invalid_message] if !valid_format?( @values[type] )
+          @errors << [ type, info[:invalid_message] ] if !range_match?( @values[type], info[:range] )
+          @errors << [ type, info[:invalid_message] ] if !valid_format?( @values[type] )
         end
         @errors.uniq!
       end
