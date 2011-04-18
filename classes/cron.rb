@@ -62,7 +62,7 @@ module VRoy; module Cron
       
       values = cron_string.split(" ")
       
-      raise "Please provide all required fields." if values.size < 6
+      raise "Please provide all required crontab fields." if values.size < 6
       
       @values = {}
       @values[:minute] = values.shift

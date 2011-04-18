@@ -1,7 +1,12 @@
 * { font-size: 14px; }
 
 #cron {
-  width: 590px;
+  width: 390px;
+  margin-top: 0px;
+}
+
+#time {
+  width: 190px;
   margin-top: 0px;
 }
 
