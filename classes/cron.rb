@@ -91,7 +91,9 @@ module VRoy; module Cron
         
         CronFields.each do |type, info|
           @errors << info[:invalid_message] if !range_match?( @values[type], info[:range] )
+          @errors << info[:invalid_message] if !valid_format?( @values[type] )
         end
+        @errors.uniq!
       end
 
       return @errors
@@ -132,6 +134,17 @@ module VRoy; module Cron
       return true if cron_value == "*"
       return true if cron_value.to_s.match(/\*\/(\d+)/) and (time_value % $1.to_i) == 0
       return true if cron_value.to_i == time_value
+      return false
+    end
+    
+    
+    def valid_format?(cron_value)
+      cron_value = cron_value.to_s.strip
+
+      return true if cron_value == "*"
+      return true if cron_value.match(/^\*\/(\d+)$/i)
+      return true if cron_value.match(/^(\d+)$/i)
+      
       return false
     end
     
