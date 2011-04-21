@@ -171,3 +171,30 @@ rescue VRoy::Cron::InvalidFormat => e
   p e.methods.sort
 end
 
+minute
+*     => every minutes
+*/2   => every [2] minutes
+1,2,3 => at the 1, 2 and 3 minutes
+1     => at minute 1
+
+hour
+*     => every hour
+*/2   => every 2 hours
+1,2,3 => of the 1, 2 and 3 hours
+1     => of hour 1
+
+Examples
+* *     => every minutes of every hours
+* */2   => every minutes of every 2 hours
+*/2 *   => every 2 minutes of every hours
+*/2 */2 => every 2 minutes of every hours
+
+
+* * * * * => every minutes
+* * 2 * * => every minutes on the 2 of the month
+* 1,3,4 * * => every minutes of hours 1, 3 and 4
+* * * 1 * => every minutes of the month 1
+0 * 1 * * => at minute 0 of every hour on the day 1
+* * * * 2012 => every minutes of year 2012
+* 1,2,3 1,2,3 1 2013 => every minutes of the hours 1, 2 and 3 of the days 1, 2 and 3 of the month 1 of year 2013
+* * 1 * * => every minutes of the day 1
