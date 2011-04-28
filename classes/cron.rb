@@ -28,7 +28,7 @@ module VRoy; module Cron
             [ :hour, {
                 :value => @hour,
                 :invalid_message => "Invalid value for hour.",
-                :range => (1..23),
+                :range => (0..23),
                 :time_value => lambda{|t| t.hour },
                 :human_string => "of"
               }],
