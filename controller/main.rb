@@ -24,6 +24,7 @@ class MainController < Ramaze::Controller
     return {
       :times => cron.next_runs( start_time ).map{|t| t.strftime("%Y-%m-%d %H:%M:%S") },
       :cmd => cron.cmd,
+      :human_format => cron.to_human_format,
       :start_time => start_time.strftime("%Y-%m-%d %H:%M"),
       :custom_time => custom_time
     }.to_json

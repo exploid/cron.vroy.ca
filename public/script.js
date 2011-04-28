@@ -40,7 +40,7 @@ $(document).ready(function(){
                 $("#results").hide();
             } else {
                 $("#error").hide();
-                $("#info").html("Starting at <b>"+data.start_time+"</b>, the command <b>"+data.cmd+"</b> will run at:");
+                $("#info").html( data.human_format ).show();
                 if ( data.custom_time == true ) {
                     $("#time").val( data.start_time );
                 }
