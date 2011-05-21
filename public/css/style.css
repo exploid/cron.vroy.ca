@@ -43,3 +43,9 @@
 .invalid_cron span {
   padding: 2px;
 }
+
+pre { /* Reset styles from proto.vroy.ca */
+  border: none;
+  background-color: none;
+  margin-left: 0px;
+}
